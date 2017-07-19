@@ -1,7 +1,7 @@
 library(shiny)
 library(dplyr)
 
-DT = read.csv('/Users/bendenisshaffer/Dropbox/myKlovr/CollegeRecommender/Data/Intrim/D8.csv')
+DT = read.csv('Data/D8.csv')
 cols = c('ACTRangeUpper','SATRangeUpper','AverageAdmittedGPA','tuition_fee','rank_overall','location','scid','SchoolName')
 reco = DT[,cols]
 
@@ -28,15 +28,22 @@ for (i in 1:dim(reco)[1]){
 
 shinyUI(
         fluidPage(
+                sidebarPanel(
+                        numericInput("ACTscore", "Your ACT Score:", value = 30, min = 1, max = 36),
+                        numericInput("SATscore", "Your SAT Score:", value = 1200, min = 400, max = 1600),
+                        numericInput("GPA", "Your GPA:", value = 3.5, min = 2, max = 4),
+                        numericInput("volunteer", "Hours of Volunteer Work:", value = 20, min = 0, max = 200),
+                        numericInput("awards", "Number of Awards:", value = 2, min = 0, max = 40),
+                        numericInput("APscore", "Your AP Score:", value = 3, min = 1, max = 4),
+                        numericInput("writing", "Writing Skills:", value = 4, min = 1, max = 10)
+                ),
                 
-                numericInput("ACTscore", "Your ACT Score:", value = 30, min = 1, max = 36),
-                numericInput("SATscore", "Your SAT Score:", value = 1200, min = 400, max = 1600),
-                numericInput("GPA", "Your GPA:", value = 3.5, min = 2, max = 4),
-                numericInput("volunteer", "Hours of Volunteer Work:", value = 20, min = 0, max = 200),
-                numericInput("awards", "Number of Awards:", value = 2, min = 0, max = 40),
-                numericInput("APscore", "Your AP Score:", value = 3, min = 1, max = 4),
-                numericInput("writing", "Writing Skills:", value = 4, min = 1, max = 10),
-                
-                dataTableOutput("recommended_schools")
+                mainPanel(
+                        dataTableOutput("recommended_schools")
+                )
         )
 )
+
+
+
+
