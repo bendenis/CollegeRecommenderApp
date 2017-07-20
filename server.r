@@ -31,7 +31,7 @@ college_recommend <- function (user_data,weights){
 
 
 
-server <- function(input, output) {
+server <- function(input, output){
         
         output$recommended_schools = renderDataTable({
                 
@@ -46,6 +46,12 @@ server <- function(input, output) {
               weights = c(0.25,0.25,0.1,0.1,0.1,0.1,0.1)
               college_recommend(user_data, weights)
                 
+        })
+        
+        output$similar_school = renderDataTable({
+                lst = sort(academicDistMat[which(academicData$SchoolName == input$school_name),])[-1]
+                tb = data.frame(Name = names(lst))
+                tb
         })
         
 }

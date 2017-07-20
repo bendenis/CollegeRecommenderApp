@@ -1,7 +1,7 @@
 library(shiny)
 library(dplyr)
 
-DT = read.csv('Data/D8.csv')
+DT = read.csv('Data/D9.csv')
 cols = c('ACTRangeUpper','SATRangeUpper','AverageAdmittedGPA','tuition_fee','rank_overall','location','scid','SchoolName')
 reco = DT[,cols]
 
@@ -25,6 +25,27 @@ for (i in 1:dim(reco)[1]){
         else reco[i,c('volunteer_hour','award','ap_score','writing')] = c(50,1,1,1)
 }
 
+data = read.csv('~/Dropbox/myKlovr/CollegeFinder/Data/Interim/D9.csv')
+data = data[,-c(1,2,3)]
+
+academicData = data[,c("AverageAdmittedGPA","SATAverageComposite","SATAverageMath",
+                       "SATAverageReading","SATAverageWriting","SATRangeLower",
+                       "SATRangeUpper","ACTAverageEnglish","ACTAverageMath",
+                       "ACTAverageWriting","ACTAverageComposite",
+                       "ACTRangeLower","ACTRangeUpper",
+                       "GradLaw","GradMedical","GradDental","GradEngineering","GradTheology",
+                       "GradEducation","GradArtsSciences","GradVeterinary","GradMBA",
+                       "Specialized","SelectivityRank","SchoolName")]
+
+academicData = na.omit(academicData)
+
+academicDataMat = scale(academicData[,-25], center = TRUE, scale = TRUE)
+
+academicDistMat = as.matrix(dist(academicDataMat, method = "minkowski", p = 1))
+
+colnames(academicDistMat) = academicData$SchoolName
+row.names(academicDistMat) = academicData$SchoolName
+
 
 shinyUI(
         fluidPage(
@@ -35,11 +56,16 @@ shinyUI(
                         numericInput("volunteer", "Hours of Volunteer Work:", value = 20, min = 0, max = 200),
                         numericInput("awards", "Number of Awards:", value = 2, min = 0, max = 40),
                         numericInput("APscore", "Your AP Score:", value = 3, min = 1, max = 4),
-                        numericInput("writing", "Writing Skills:", value = 4, min = 1, max = 10)
+                        numericInput("writing", "Writing Skills:", value = 4, min = 1, max = 10),
+                        selectInput("school_name", label = "Which School do you like?", 
+                                    choices = academicData$SchoolName)
                 ),
                 
                 mainPanel(
-                        dataTableOutput("recommended_schools")
+                        h1("Recommended Based on Your Academics"),
+                        dataTableOutput("recommended_schools"),
+                        h1("Similar to the School you Like"),
+                        dataTableOutput("similar_school")
                 )
         )
 )
