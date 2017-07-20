@@ -1,6 +1,24 @@
 library(shiny)
 library(dplyr)
 
+academicData = DT[,c("AverageAdmittedGPA","SATAverageComposite","SATAverageMath",
+                     "SATAverageReading","SATAverageWriting","SATRangeLower",
+                     "SATRangeUpper","ACTAverageEnglish","ACTAverageMath",
+                     "ACTAverageWriting","ACTAverageComposite",
+                     "ACTRangeLower","ACTRangeUpper",
+                     "GradLaw","GradMedical","GradDental","GradEngineering","GradTheology",
+                     "GradEducation","GradArtsSciences","GradVeterinary","GradMBA",
+                     "Specialized","SelectivityRank","SchoolName")]
+
+academicData = na.omit(academicData)
+
+academicDataMat = scale(academicData[,-25], center = TRUE, scale = TRUE)
+
+academicDistMat = as.matrix(dist(academicDataMat, method = "minkowski", p = 1))
+
+colnames(academicDistMat) = academicData$SchoolName
+row.names(academicDistMat) = academicData$SchoolName
+
 college_recommend <- function (user_data,weights){
         for (i in 1:nrow(reco)) { 
                 cols = c('ACTRangeUpper','SATRangeUpper','AverageAdmittedGPA','volunteer_hour','award','ap_score','writing')

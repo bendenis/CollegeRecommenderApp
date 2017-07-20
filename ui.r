@@ -16,6 +16,23 @@ reco$award = 1:1878
 reco$writing = 1:1878
 reco$ap_score = 1:1878
 
+academicData = DT[,c("AverageAdmittedGPA","SATAverageComposite","SATAverageMath",
+                     "SATAverageReading","SATAverageWriting","SATRangeLower",
+                     "SATRangeUpper","ACTAverageEnglish","ACTAverageMath",
+                     "ACTAverageWriting","ACTAverageComposite",
+                     "ACTRangeLower","ACTRangeUpper",
+                     "GradLaw","GradMedical","GradDental","GradEngineering","GradTheology",
+                     "GradEducation","GradArtsSciences","GradVeterinary","GradMBA",
+                     "Specialized","SelectivityRank","SchoolName")]
+
+academicData = na.omit(academicData)
+
+academicDataMat = scale(academicData[,-25], center = TRUE, scale = TRUE)
+academicDistMat = as.matrix(dist(academicDataMat, method = "minkowski", p = 1))
+colnames(academicDistMat) = academicData$SchoolName
+row.names(academicDistMat) = academicData$SchoolName
+
+
 # manually set values
 for (i in 1:dim(reco)[1]){ 
         if (is.na(reco$rank_overall[i])) reco[i,c('volunteer_hour','award','ap_score','writing')] = c(50,1,1,1)
@@ -25,26 +42,9 @@ for (i in 1:dim(reco)[1]){
         else reco[i,c('volunteer_hour','award','ap_score','writing')] = c(50,1,1,1)
 }
 
-data = read.csv('~/Dropbox/myKlovr/CollegeFinder/Data/Interim/D9.csv')
-data = data[,-c(1,2,3)]
 
-academicData = data[,c("AverageAdmittedGPA","SATAverageComposite","SATAverageMath",
-                       "SATAverageReading","SATAverageWriting","SATRangeLower",
-                       "SATRangeUpper","ACTAverageEnglish","ACTAverageMath",
-                       "ACTAverageWriting","ACTAverageComposite",
-                       "ACTRangeLower","ACTRangeUpper",
-                       "GradLaw","GradMedical","GradDental","GradEngineering","GradTheology",
-                       "GradEducation","GradArtsSciences","GradVeterinary","GradMBA",
-                       "Specialized","SelectivityRank","SchoolName")]
 
-academicData = na.omit(academicData)
 
-academicDataMat = scale(academicData[,-25], center = TRUE, scale = TRUE)
-
-academicDistMat = as.matrix(dist(academicDataMat, method = "minkowski", p = 1))
-
-colnames(academicDistMat) = academicData$SchoolName
-row.names(academicDistMat) = academicData$SchoolName
 
 
 shinyUI(
