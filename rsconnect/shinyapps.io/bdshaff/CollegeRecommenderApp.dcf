@@ -3,8 +3,8 @@ title: CollegeRecommenderApp
 account: bdshaff
 server: shinyapps.io
 appId: 198353
-bundleId: 910476
+bundleId: 910477
 url: https://bdshaff.shinyapps.io/CollegeRecommenderApp/
-when: 1500583294.77223
+when: 1500583348.52611
 asMultiple: FALSE
 asStatic: FALSE
