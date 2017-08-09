@@ -10,7 +10,7 @@ server <- function(input, output){
         )
         
         output$location_table = renderTable(
-                DT %>% filter(SchoolName == input$school_name) %>% select(State.x, City, Region, Longitude, Latitude, CampusType, LocationDescription)
+                DT %>% filter(SchoolName == input$school_name) %>% select(State, City, Region, Longitude, Latitude, CampusType, LocationDescription)
         )
 
         output$ranking_table = renderTable(
